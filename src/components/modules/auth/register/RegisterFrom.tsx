@@ -3,7 +3,7 @@
 const RegisterFrom = () => {
     return (
         <div>
-            <h1>Register From</h1>
+            <h1>Register From a</h1>
         </div>
     );
 };
