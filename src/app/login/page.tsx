@@ -1,7 +1,9 @@
+import LoginForm from "@/components/modules/auth/login/LoginFrom";
+
 const LoginPage = () => {
     return (
-        <div>
-            
+        <div className="h-screen w-screen flex items-center justify-center">
+            <LoginForm />
         </div>
     );
 };
