@@ -1,7 +1,7 @@
 
 
 "use client"
-
+import ReCAPTCHA from "react-google-recaptcha";
 import Logo from "@/app/assets/svgs/Logo";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -9,9 +9,10 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import { loginUser } from "@/services/AuthService";
+import { loginUser, reCaptchaTokenVerification } from "@/services/AuthService";
 import { toast } from "sonner";
 import { loginSchema } from "./loginValidation";
+import { useState } from "react";
 
 const LoginForm = () => {
     const form = useForm({
@@ -19,6 +20,17 @@ const LoginForm = () => {
     })
 
     const { formState: { isSubmitting } } = form
+    const [reCaptchaStatus, setReCaptchaStatus] = useState(false)
+    const handleReCaptcha = async (value: string | null) => {
+        try {
+            const res = await reCaptchaTokenVerification(value!)
+            if (res.success) {
+                setReCaptchaStatus(true)
+            }
+        } catch (error: any) {
+            console.error(error)
+        }
+    }
 
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         try {
@@ -71,7 +83,12 @@ const LoginForm = () => {
                             </FormItem>
                         )}
                     />
+                    <div className="flex mt-3 w-full">
+                        <ReCAPTCHA className="mx-auto" sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_CLIENT_KEY!}
+                            onChange={handleReCaptcha} />
+                    </div>
                     <Button
+                        disabled={reCaptchaStatus ? false : true}
                         type="submit"
                         className="mt-5 w-full"
                     >
