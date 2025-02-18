@@ -10,7 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { registrationSchema } from "./registerValidation";
-import { registerUser } from "@/services/AuthService/intex";
+import { registerUser } from "@/services/AuthService";
 import { toast } from "sonner";
 
 const RegisterFrom = () => {

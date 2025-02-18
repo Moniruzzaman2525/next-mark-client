@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import { loginUser } from "@/services/AuthService/intex";
+import { loginUser } from "@/services/AuthService";
 import { toast } from "sonner";
 import { loginSchema } from "./loginValidation";
 
