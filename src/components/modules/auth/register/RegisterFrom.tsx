@@ -1,3 +1,5 @@
+
+
 "use client"
 
 import Logo from "@/app/assets/svgs/Logo";
@@ -8,13 +10,30 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { registrationSchema } from "./registerValidation";
+import { registerUser } from "@/services/AuthService/intex";
+import { toast } from "sonner";
 
 const RegisterFrom = () => {
     const form = useForm({
         resolver: zodResolver(registrationSchema)
     })
-    const onSubmit: SubmitHandler<FieldValues> = (data) => {
-        console.log(data)
+
+    const { formState: { isSubmitting } } = form
+
+    const password = form.watch("password");
+    const passwordConfirm = form.watch("passwordConfirm");
+
+    const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+        try {
+            const res = await registerUser(data)
+            if (res.success) {
+                toast.success(res?.message)
+            } else {
+                toast.success(res?.message)
+            }
+        } catch (error: any) {
+            toast.error(error?.message)
+        }
     }
     return (
         <div className="border-2 border-gray-300 rounded-xl flex-grow max-w-md w-full p-5">
@@ -77,15 +96,22 @@ const RegisterFrom = () => {
                                 <FormControl>
                                     <Input type="password" {...field} value={field.value || ""} />
                                 </FormControl>
+
+                                {passwordConfirm && password !== passwordConfirm ? (
+                                    <FormMessage> Password does not match </FormMessage>
+                                ) : (
+                                    <FormMessage />
+                                )}
                             </FormItem>
                         )}
                     />
 
                     <Button
+                        disabled={password !== passwordConfirm}
                         type="submit"
                         className="mt-5 w-full"
                     >
-                        Registering
+                        {isSubmitting ? 'Registering' : 'Register'}
                     </Button>
                 </form>
             </Form>
