@@ -107,7 +107,7 @@ const RegisterFrom = () => {
                     />
 
                     <Button
-                        disabled={password !== passwordConfirm}
+                        disabled={password !== passwordConfirm ? true : false}
                         type="submit"
                         className="mt-5 w-full"
                     >
