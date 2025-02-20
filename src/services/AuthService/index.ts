@@ -43,7 +43,7 @@ export const loginUser = async (userData: FieldValues) => {
 }
 
 export const getCurrentUser = async () => {
-    const accessToken = (await cookies()).get('accessToken')!.value
+    const accessToken = (await cookies()).get('accessToken')?.value
     let decodedData = null
     if (accessToken) {
         decodedData = await jwtDecode(accessToken)
@@ -70,4 +70,7 @@ export const reCaptchaTokenVerification = async (token: string) => {
     } catch (error: any) {
         return Error(error)
     }
+}
+export const logout = async () => {
+    ((await cookies()).delete('accessToken'))
 }
