@@ -25,15 +25,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <Provider>
-      <html lang="en">
-        <body
-          className={`${geistSans.variable} ${geistMono.className} antialiased`}
-        >
+    <html lang="en">
+
+      <body
+        className={`${geistSans.variable} ${geistMono.className} antialiased`}
+      >
+        <Provider>
           <Toaster richColors position="top-center" />
           {children}
-        </body>
-      </html>
-    </Provider>
+        </Provider>
+      </body>
+
+    </html>
   );
 }
