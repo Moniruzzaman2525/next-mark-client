@@ -1,11 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 
-import cartSlice from './features/cartSlice'
+import cartReducer from './features/cartSlice'
+import {persistReducer} from 'redux-persist'
 
 export const makeStore = () => {
     return configureStore({
         reducer: {
-            cart: cartSlice
+            cart: cartReducer
         },
     })
 }
