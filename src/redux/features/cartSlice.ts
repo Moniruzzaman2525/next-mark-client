@@ -1,28 +1,46 @@
 import { IProduct } from "@/types";
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store";
+import { addCoupon } from "@/services/Cart";
 
 export interface CartProduct extends IProduct {
     orderQuantity: number
 }
 
 type InitialState = {
-    products: CartProduct[]
-    city: string,
-    shippingAddress: string
+    products: CartProduct[];
+    city: string;
+    shippingAddress: string;
+    shopId: string;
 }
 
 const initialState: InitialState = {
     products: [],
     city: '',
-    shippingAddress: ''
+    shippingAddress: '',
+    shopId: ''
 }
+
+export const fetchCoupon = createAsyncThunk('cart/fetchCoupon', async ({ shopId, subTotal, couponCode }: { shopId: string, subTotal: number, couponCode: string }) => {
+    try {
+        const res = await addCoupon({ shopId, subTotal, couponCode })
+        console.log(res)
+    } catch (error) {
+        console.log(error)
+    }
+})
 
 const cartSlice = createSlice({
     name: 'cart',
     initialState,
     reducers: {
         addProduct: (state, action) => {
+
+
+            if (state.products.length === 0) {
+                state.shopId = action.payload.shop._id
+            }
+
             const productToAdd = state.products.find(
                 (product) => product._id === action.payload._id
             )
@@ -64,6 +82,17 @@ const cartSlice = createSlice({
             state.city = ''
             state.shippingAddress = ""
         }
+    },
+    extraReducers: (builder) =>  {
+        builder.addCase(fetchCoupon.pending, (state, action) => {
+            console.log(action, 'pending')
+        })
+        builder.addCase(fetchCoupon.rejected, (state, action) => {
+            console.log(action, 'rejected')
+        })
+        builder.addCase(fetchCoupon.fulfilled, (state, action) => {
+            console.log(action, 'fulfilled')
+        })
     }
 })
 
@@ -112,6 +141,11 @@ export const grandTotalSelector = (state: RootState) => {
     const subTotal = subTotalSelector(state)
     const shippingCost = shippingCostSelector(state)
     return subTotal + shippingCost
+}
+
+
+export const shopSelector = (state: RootState) => {
+    return state.cart.shopId
 }
 
 export const { addProduct, incrementOrderQuantity, decrementOrderQuantity, removeProduct, updateCity, updateShippingAddress, clearCart } = cartSlice.actions

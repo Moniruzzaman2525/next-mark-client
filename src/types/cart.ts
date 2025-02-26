@@ -10,3 +10,10 @@ export interface IOrderProduct {
     quantity: number;
     color: string;
 }
+
+
+export interface ICoupon {
+    shopId: string;
+    subTotal: number;
+    couponCode: string
+}
