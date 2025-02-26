@@ -44,7 +44,7 @@ const LoginForm = () => {
                 if (redirect) {
                     router.push(redirect)
                 } else {
-                    router.push('/profile')
+                    router.push('/')
                 }
             }
         } catch (error: any) {
