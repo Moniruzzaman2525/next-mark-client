@@ -4,9 +4,9 @@ import Image from "next/image";
 import emptyCart from "@/app/assets/empty-cart.png";
 import CartProductCard from "./CartProductCard";
 import { useAppSelector } from "@/redux/hook";
-import { CartProduct, orderedProductsSelector,  } from "@/redux/features/cartSlice";
+import { CartProduct, orderProductSelector } from "@/redux/features/cartSlice";
 export default function CartProducts() {
-    const products = useAppSelector(orderedProductsSelector)
+    const products = useAppSelector(orderProductSelector)
 
     return (
         <div className="border-2 border-white bg-background brightness-105 rounded-md col-span-8 h-full row-span-3 p-10 space-y-5">
