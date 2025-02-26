@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { useUser } from "@/context/UserContext";
 import { currencyFormatter } from "@/lib/currencyFormatter";
-import { citySelector, clearCart, couponSelector, discountAmountSelector, grandTotalSelector,  orderedProductsSelector,  orderSelector, shippingAddressSelector, shippingCostSelector, subTotalSelector } from "@/redux/features/cartSlice";
+import { citySelector, clearCart, couponSelector, discountAmountSelector, grandTotalSelector,  orderProductSelector,  orderSelector, shippingAddressSelector, shippingCostSelector, subTotalSelector } from "@/redux/features/cartSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { createOrder } from "@/services/Cart";
 import { useRouter } from "next/navigation";
@@ -17,7 +17,7 @@ export default function PaymentDetails() {
     const order = useAppSelector(orderSelector);
     const city = useAppSelector(citySelector);
     const shippingAddress = useAppSelector(shippingAddressSelector);
-    const cartProducts = useAppSelector(orderedProductsSelector);
+    const cartProducts = useAppSelector(orderProductSelector);
     const discountAmount = useAppSelector(discountAmountSelector)
     const coupon = useAppSelector(couponSelector)
 
