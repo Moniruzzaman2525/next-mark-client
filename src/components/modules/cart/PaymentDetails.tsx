@@ -3,10 +3,11 @@
 import { Button } from "@/components/ui/button";
 import { useUser } from "@/context/UserContext";
 import { currencyFormatter } from "@/lib/currencyFormatter";
-import { citySelector, clearCart, grandTotalSelector, orderProductSelector, orderSelector, shippingAddressSelector, shippingCostSelector, subTotalSelector } from "@/redux/features/cartSlice";
+import { citySelector, clearCart, couponSelector, discountAmountSelector, grandTotalSelector,  orderedProductsSelector,  orderSelector, shippingAddressSelector, shippingCostSelector, subTotalSelector } from "@/redux/features/cartSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { createOrder } from "@/services/Cart";
 import { useRouter } from "next/navigation";
+import { use } from "react";
 import { toast } from "sonner";
 
 export default function PaymentDetails() {
@@ -16,7 +17,9 @@ export default function PaymentDetails() {
     const order = useAppSelector(orderSelector);
     const city = useAppSelector(citySelector);
     const shippingAddress = useAppSelector(shippingAddressSelector);
-    const cartProducts = useAppSelector(orderProductSelector);
+    const cartProducts = useAppSelector(orderedProductsSelector);
+    const discountAmount = useAppSelector(discountAmountSelector)
+    const coupon = useAppSelector(couponSelector)
 
     const user = useUser();
 
@@ -41,9 +44,18 @@ export default function PaymentDetails() {
             if (!shippingAddress) {
                 throw new Error("Shipping address is missing");
             }
+            let orderData;
+            if (coupon.code) {
+                orderData = {
+                    ...order,
+                    coupon: coupon.code
+                }
+            } else {
+                orderData = order
+            }
 
 
-            const res = await createOrder(order);
+            const res = await createOrder(orderData);
             console.log(res)
 
             if (res.success) {
@@ -70,7 +82,7 @@ export default function PaymentDetails() {
                 </div>
                 <div className="flex justify-between">
                     <p className="text-gray-500 ">Discount</p>
-                    <p className="font-semibold">{currencyFormatter(0)}</p>
+                    <p className="font-semibold">{currencyFormatter(discountAmount)}</p>
                 </div>
                 <div className="flex justify-between">
                     <p className="text-gray-500 ">Shipment Cost</p>
